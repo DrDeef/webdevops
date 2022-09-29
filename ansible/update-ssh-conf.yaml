@@ -1,0 +1,88 @@
+## following --extra-vars must be passed to the playbook:
+#
+#  Username = your username e.g. fmd-ag
+#
+
+- hosts: localhost
+  become: no
+  # gather_facts: False
+
+  tasks:
+
+- name: add SSH Hosts
+  lineinfile: 
+    state: present
+    insertafter: EOF
+    dest: /home/{{ username }}/.ssh/config
+    line: "{{ item }}"
+    
+  with_items:
+   - Host lightsail-ehrmann
+   -        hostname 3.64.144.72
+   -        user fmd-kürzel
+   - Host lightsail-krimidinner
+   -       hostname 52.28.249.133
+   -        user fmd-kürzel
+   - Host lightsail-klett
+   -        hostname 18.159.190.36
+   -        user {{ username }}
+   - Host lightsail-apcoa
+   -        hostname 18.198.44.51
+   -        user fmd-kürzel
+   - Host lightsail-dumpstar
+   -        hostname 3.123.83.11
+   -        user fmd-kürzel
+   - Host lightsail-jung
+   -        hostname 18.157.217.8
+   -        user fmd-kürzel
+   - Host lightsail-gf
+   -        hostname 35.159.13.254
+   -       user fmd-kürzel
+   - Host lightsail-icinga2
+   -       hostname 18.193.220.85
+   -        user ubuntu
+   - Host lightsail-krannich
+   -        hostname 3.68.141.49
+   -        user fmd-kürzel
+   - Host lightsail-kürzel01
+   -        hostname 3.68.166.135
+   -        user fmd-kürzel
+   - Host lightsail-web01
+   -        hostname 18.198.145.87
+   -        user fmd-kürzel
+   - Host lightsail-bollermann
+   -        hostname 3.64.140.172
+   -        user fmd-kürzel
+   - Host lightsail-whm1
+   -        hostname 3.65.101.129
+   -        user centos
+   - host lightsail-proxybox
+   -        hostname 18.198.73.63
+   -        user fmd-kürzel
+   - Host lightsail-jung
+   -        hostname 3.127.135.75
+   -        user fmd-kürzel
+   - Host lightsail-direktsprachreisen
+   -       hostname direktsprachreisen.aws.pxia.de
+   - Host ovh-mobi
+   -        hostname 51.75.76.197
+   -        user fmd-kürzel
+   - Host lightsail-paccor
+   -   hostname 18.158.29.17
+   -    user fmd-kürzel
+   -    port 2222
+   - Host lightsail-fullmoon
+   -     hostname 3.122.217.16
+   -     user fmd-kürzel
+   - host lightsail-fohhn
+   -        hostname 18.195.128.78
+   -        user fmd-kürzel
+   - host lightsail-engelberg
+   -        hostname 18.185.237.93
+   -        user fmd-kürzel
+
+
+- replace:
+   path: /home/{{ username }}/.ssh/config
+   regexp: 'Replaceusername'
+   replace: '{{ username }}'

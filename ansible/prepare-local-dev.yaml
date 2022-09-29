@@ -1,0 +1,32 @@
+## following --extra-vars must be passed to the playbook:
+#
+#  Hostname see prodHostName.txt
+#  You need to have hosts added to your .ssh/config
+#  CustomerName = need to be the same for the .ENV within docker
+#
+
+- hosts: localhost
+  become: no
+
+  tasks:
+
+
+  - name: Create Docroot
+    file:
+      path: /var/www/htdocs/{{ CustomerName }}
+      state: directory
+      mode: 2775
+      recurse: yes
+
+  - name: Create MySQL File Root
+    file:
+      path: /var/www/mysql-data/{{ CustomerName }}
+      state: directory
+      mode: 2775
+      recurse: yes
+
+  - name: Get latest SQL File for {{ CustomerName }}
+    raw: scp lightsail-dumpstar:/var/dumpstar/{{ prodHostName }}/{{ CustomerName }}.sql /var/www/mysql-data/{{ CustomerName }}/{{ CustomerName }}.sql
+
+  - name: Get latest Media Files for {{ CustomerName }}
+    raw: scp lightsail-dumpstar:/var/mediastar/{{ prodHostName }}/media.tar.gz /var/www/{{ CustomerName }}/media.tar.gz
