@@ -1,9 +1,9 @@
-version: '3.3'
+version: '3.5'
 
 services:
 # base images from gitlab registry
   nginx:
-    image: 'gitlab.fullmoon.de:5050/fm-digital/fmd-docker-registry/${NGINX}:${NGINXTAG}'
+    image: '${NGINX}:${NGINXTAG}'
     container_name: "nginx_${CUSTOMERNAME}"
     command: sh -c "sed -i 's/php-fpm/FPM_${PHPVERSION}_${CUSTOMERNAME}/' /etc/nginx/sites-enabled/default && nginx"
 # no open ports due traefik proxy
@@ -20,7 +20,7 @@ services:
 #      timeout: 10s
 #      retries: 3
     depends_on:
-      - traefik
+#      - traefik
       - php-fpm
     networks:
       - traefik-network
@@ -28,14 +28,14 @@ services:
 
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.ContainerName.rule=Host(`${CUSTOMERNAME}.localdev.pxia.de`)"
+      - "traefik.http.routers.ContainerName.rule=Host(`${CUSTOMERNAME}.localdev.de`)"
       - "traefik.docker.network=traefik-network"
       - "traefik.http.routers.ContainerName.entrypoints=web" 
 #      - "traefik.http.routers.ContainerName.entrypoints=websecure"
 #      - "traefik.http.routers.ContainerName.tls.certresolver=myresolver"
 
   php-fpm:
-    image: 'gitlab.fullmoon.de:5050/fm-digital/fmd-docker-registry/fmd-${PHPVERSION}:${PHPTAG}'
+    image: 'php-fpm${PHPVERSION}:${PHPTAG}'
     container_name: "FPM_${PHPVERSION}_${CUSTOMERNAME}"
     volumes:
       - '${LOCALROOT}/${CUSTOMERNAME}/htdocs:/var/www/htdocs'
