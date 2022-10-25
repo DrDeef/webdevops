@@ -24,7 +24,7 @@ services:
       - php-fpm
     networks:
       - traefik-network
-      - connector
+      - ${CUSTOMERNAME}-connector
 
     labels:
       - "traefik.enable=true"
@@ -41,7 +41,7 @@ services:
       - '${LOCALROOT}/${CUSTOMERNAME}/htdocs:/var/www/htdocs'
 #      - fpm
     networks:
-      - connector
+      - ${CUSTOMERNAME}-connector
 
   mysql:
     image: 'mysql:${MYSQLTAG}'
@@ -59,7 +59,7 @@ services:
       - mysql:/var/lib/mysql
       - '${MYSQLSQLDIR}:/docker-entrypoint-initdb.d'
     networks:
-      - connector
+      - ${CUSTOMERNAME}-connector
     depends_on:
       - nginx
 

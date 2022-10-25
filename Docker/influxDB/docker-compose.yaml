@@ -1,0 +1,46 @@
+version: '3.5'
+
+services:
+  influxdb:
+    image: "influxdb:latest"
+    restart: always
+    container_name: "influxdb"
+
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=${INFLUXDB_INIT_MODE}
+      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_INIT_USERNAME}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_INIT_PASSWORD}
+      - DOCKER_INFLUXDB_INIT_ORG=${INFLUXDB_INIT_ORG}
+      - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUXDB_INIT_BUCKET}
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUXDB_INIT_ADMIN_TOKEN}
+      - INFLUXD_LOG_LEVEL=${INFLUXD_LOG_LEVEL}
+      - TZ=${TZ}
+
+    networks:
+      - traefik-network
+      - influxdb-network
+
+    ports:
+      - 127.0.0.1:8086:8086
+    volumes:
+      - "./conf:/etc/influxdb2"
+      - data_influxdb:/var/lib/influxdb2
+
+volumes:
+  data_influxdb:
+
+    labels:
+      - "traefik.enable=true"
+#      - "traefik.http.routers.fmtv.rule=Host(`fmtv.traefik.pxia.de`)"
+#      - "traefik.http.routers.fmtv.entrypoints=web"
+#      - "traefik.http.routers.nginx.entrypoints=websecure"
+
+
+
+networks:
+  traefik-network:
+    name: traefik-network
+    driver: bridge
+  influxdb-network:
+    name: influxdb-network
+    driver: bridge
